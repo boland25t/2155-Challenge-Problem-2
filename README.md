@@ -15,7 +15,7 @@ Or using **Conda**:
 conda env create -f env.yml
 ```
 
-### 3. Activate the environment
+### Activate the environment
 
 ```bash
 conda activate cp2
