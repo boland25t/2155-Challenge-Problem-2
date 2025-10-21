@@ -14,7 +14,60 @@ def onehot_and_flatten(grids):
     :return:
         A 2D array of one-hot encoded grids, where each row is a grid.
     """
+    # === One-Hot Encoding Step ===
+# BLUF: This line converts each integer-valued grid cell into a one-hot encoded
+# 5-channel binary representation using NumPy broadcasting.
+#
+# (np.arange(5) == grids[..., None]) Explanation:
+# - np.arange(5) → array([0, 1, 2, 3, 4]): list of all class labels (num_classes = 5).
+# - grids[..., None] adds an extra trailing dimension (shape becomes (N, H, W, 1)).
+#   The "..." means “all existing dimensions”, and "None" inserts a new axis.
+# - When compared, NumPy broadcasts these arrays:
+#     (N, H, W, 1) vs (5,) → (N, H, W, 5)
+#   Each grid cell is compared against all 5 class labels, producing True/False
+#   flags that indicate which class each cell belongs to.
+# - .astype(int) converts True/False → 1/0 to yield a numeric one-hot tensor.
+#
+# Result: grids_oh has shape (N, H, W, 5), where each cell location contains
+# a vector like [0,0,1,0,0] if its original label was “2”.
+
     grids_oh = (np.arange(5) == grids[...,None]).astype(int)
+# === Flatten one-hot grids (example visualization) ===
+# BLUF: Converts each 4D one-hot grid (N, H, W, num_classes) into a single 2D array (N, H*W*num_classes)
+# where each row corresponds to one flattened grid.
+#
+# Example:
+# Suppose we have two 2x2 grids (N=2, H=2, W=2) with 3 classes (0,1,2):
+#
+# grids =
+# [[[0, 1],
+#   [2, 0]],
+#
+#  [[1, 2],
+#   [0, 2]]]
+#
+# After one-hot encoding (np.arange(3) == grids[..., None]):
+# grids_oh.shape = (2, 2, 2, 3)
+# The first grid expands to:
+# [
+#   [[1,0,0], [0,1,0]],
+#   [[0,0,1], [1,0,0]]
+# ]
+#
+# Flattening step:
+# grids_flat = np.reshape(grids_oh, (grids_oh.shape[0], -1))
+#
+# Result:
+# grids_flat.shape = (2, 12)
+#
+# grids_flat[0] → [1,0,0,  0,1,0,  0,0,1,  1,0,0]
+# (2×2 cells × 3 classes = 12 total features)
+#
+# Key idea:
+# - The first axis (N) still identifies which grid each row came from.
+# - '-1' automatically infers how many features fit in each row (H*W*num_classes).
+# - This flattened representation is compact and ideal for pairwise comparison
+#   or feeding into machine-learning models.
     grids_flat = np.reshape(grids_oh, (grids_oh.shape[0], -1))
     return grids_flat
 
@@ -70,16 +123,45 @@ def plot_ratings_histogram(ratings, withmin=False):
 
 def diversity_score(grids, N=100):
     """
-    Compute the diversity score of a set of grids.
-    param grids:
-        A set of grids, where each grid is a 7x7 grid of integers.
-    param N:
-        The number of grids to normalize by.
+    Compute an overall diversity score between a set of categorical grids.
+
+    BLUF: Measures how different each grid is from all others using pairwise
+    Manhattan (cityblock) distances on flattened one-hot encodings, then normalizes
+    by the total possible comparisons and grid size.
+
+    Parameters
+    ----------
+    grids : np.ndarray, shape (M, 7, 7)
+        Batch of integer-labeled grids (e.g., categorical layouts).
+    N : int, optional (default=100)
+        Normalization constant representing the reference number of grids.
+
+    Returns
+    -------
+    float
+        A scalar diversity score in [0, 1], where higher values indicate
+        greater structural diversity among the input grids.
+
+    Example
+    -------
+    # Two 2x2 example grids for intuition:
+    # grid1 = [[0,1],[2,0]], grid2 = [[1,2],[0,2]]
+    # After one-hot + flatten, compute pairwise Manhattan distance.
+    # D = [[0, 8],
+    #      [8, 0]]
+    # np.sum(D)/(N^2*n^2*2) normalizes this to a small positive fraction.
+    #
+    # Conceptual steps:
+    # 1. One-hot encode each grid -> binary feature vector per grid.
+    # 2. Compute all pairwise cityblock distances (Manhattan metric).
+    # 3. Sum all distances, then normalize by N^2 * n^2 * 2 to keep
+    #    the score bounded and comparable across runs.
     """
-    grids_flat = onehot_and_flatten(grids)
-    n = grids.shape[1]
-    D = squareform(pdist(grids_flat, 'cityblock'))
-    return np.sum(D)/(N**2*n**2*2)
+    grids_flat = onehot_and_flatten(grids)        # Flatten each grid into one long binary vector
+    n = grids.shape[1]                            # Grid dimension (7 for 7x7)
+    D = squareform(pdist(grids_flat, 'cityblock'))# Pairwise diversity matrix
+    return np.sum(D)/(N**2 * n**2 * 2)            # Normalized diversity score
+
 
 def plot_grid_image(grid, on_ax=None):
     """
