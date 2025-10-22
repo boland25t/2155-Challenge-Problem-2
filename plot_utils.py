@@ -35,7 +35,4 @@ def plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, advisor):
     #Calculate R2 score for train and test sets
     print(f"Advisor {advisor} Train Set R2 score: {r2_score(ratings_train, preds_train)}") 
     print(f"Advisor {advisor} Test Set R2 score: {r2_score(ratings_test, preds_test)}")
-
-preds_train = LR.predict(grids_train) #predict on the train set
-preds_test = LR.predict(grids_test) #predict on the test set
-plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, 0)
+    

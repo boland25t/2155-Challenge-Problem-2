@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 
 from fe import *
-
+from plot_utils import *
 # =============================================================================
 # =======================       TRAINING/EVAL       ===========================
 # =============================================================================
