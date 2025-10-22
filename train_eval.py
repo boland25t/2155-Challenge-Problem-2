@@ -9,6 +9,10 @@ from sklearn.metrics import r2_score
 
 from fe import *
 from plot_utils import *
+
+from sklearn.model_selection import train_test_splits
+import pandas as pd
+
 # =============================================================================
 # =======================       TRAINING/EVAL       ===========================
 # =============================================================================
@@ -25,6 +29,7 @@ def FE_split_train_eval(grids, FE_fn, advisor, ratings_subset): #feature enginee
     preds_test = LR.predict(grids_test) #predict on the test set
     plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, advisor) #plot and calculate R2
     return LR
+
 
 def merge_predictions(grids, ratings, FE_fn, predictor): #Combine predictions and real ratings
     full_dataset_FA = FE_fn(grids) #feature engineering on full dataset

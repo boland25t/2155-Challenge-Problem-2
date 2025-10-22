@@ -67,4 +67,3 @@ def plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, advisor):
     print(f"Advisor {advisor} Test Set R2 score: {r2_test}")
     
 
-    
