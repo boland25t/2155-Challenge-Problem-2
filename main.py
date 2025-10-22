@@ -21,9 +21,6 @@ from sklearn.metrics import r2_score
 grids = load_grids()
 
 ratings = np.load("datasets/scores.npy")
-ratings_df = pd.DataFrame(ratings, columns = ["Wellness", "Tax", "Transportation", "Business"])
-
-subset = grids[:100]
 
 def predict():
     all_predictions = [] #empty list to hold predictions
@@ -31,9 +28,7 @@ def predict():
         predictions = fit_plot_predict(grids, ratings, i) #call the above function
         all_predictions.append(predictions) #append predictions
 
-
-
-
+predict()
 
 
 
