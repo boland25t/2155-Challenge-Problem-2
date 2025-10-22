@@ -14,7 +14,7 @@ from plot_utils import *
 # =============================================================================
 
 def FE_split_train_eval(grids, FE_fn, advisor, ratings_subset): #feature engineering, split, train, evaluate
-    grids_fa = FE_fn(grids) #call the provided feature engineering function on the grids
+    grids_fa = FE_fn(grids, verbose=False) #call the provided feature engineering function on the grids
     
     grids_train, grids_test, ratings_train, ratings_test = train_test_split(grids_fa, ratings_subset) #split
 
