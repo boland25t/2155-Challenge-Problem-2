@@ -9,6 +9,7 @@ from utils_public import *
 from train_eval import *
 import numpy as np
 import pandas as pd
+import os
 
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -18,6 +19,8 @@ from sklearn.metrics import r2_score
 # =============================================================================
 # =========================        PREDICTIONS         ========================
 # =============================================================================
+
+
 grids = load_grids()
 
 ratings = np.load("datasets/scores.npy")
@@ -30,7 +33,13 @@ def predict():
 
 predict()
 
-
+try:
+    subprocess.run(["latexmk", "-pdf", "plots.tex"], check=True)
+    print("✅ LaTeX PDF rebuilt successfully.")
+except FileNotFoundError:
+    print("⚠️ LaTeXmk not found. Skipping PDF build.")
+except subprocess.CalledProcessError:
+    print("❌ LaTeX build failed. Check plots.tex for errors.")
 
 
 
