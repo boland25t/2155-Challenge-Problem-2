@@ -163,6 +163,7 @@ def diversity_score(grids, N=100):
     return np.sum(D)/(N**2 * n**2 * 2)            # Normalized diversity score
 
 
+
 def plot_grid_image(grid, on_ax=None):
     """
     Plot a city grid (optionol: on an axis)

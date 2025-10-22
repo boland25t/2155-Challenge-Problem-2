@@ -37,7 +37,7 @@ def merge_predictions(grids, ratings, FE_fn, predictor): #Combine predictions an
 def fit_plot_predict(grids, ratings, advisor):
     grids_subset, ratings_subset = select_rated_subset(grids, ratings[:,advisor]) #gets subset of the dataset rated by advisor 0
 
-    FE_fn = append_district_counts # Select append_district_counts as our feature engineering function
+    FE_fn = FE_main # Select append_district_counts as our feature engineering function
 
     LR = FE_split_train_eval(grids_subset, FE_fn, advisor, ratings_subset) #feature engineering, split, train, evaluate
 
