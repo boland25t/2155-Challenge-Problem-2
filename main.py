@@ -39,6 +39,7 @@ def predict():
 
     # tqdm bar for advisors
     for advisor in tqdm(range(4), desc="Advisors", ncols=80):
+        print("advisor count " + str(advisor))
         predictions = fit_plot_predict(grids, ratings, advisor)
         all_predictions.append(predictions)
 

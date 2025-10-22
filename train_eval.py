@@ -41,5 +41,5 @@ def fit_plot_predict(grids, ratings, advisor):
 
     LR = FE_split_train_eval(grids_subset, FE_fn, advisor, ratings_subset) #feature engineering, split, train, evaluate
 
-    predictions = merge_predictions(grids, ratings[:,advisor], FE_fn, LR) #merge predictions with actual ratings
-    return predictions
+    #predictions = merge_predictions(grids, ratings[:,advisor], FE_fn, LR) #merge predictions with actual ratings
+    return 
