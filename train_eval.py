@@ -15,18 +15,53 @@ from plot_utils import *
 # =======================       TRAINING/EVAL       ===========================
 # =============================================================================
 
-def FE_split_train_eval(grids, FE_fn, advisor, ratings_subset): #feature engineering, split, train, evaluate
-    grids_fa = FE_fn(grids, verbose=False) #call the provided feature engineering function on the grids
-    
-    grids_train, grids_test, ratings_train, ratings_test = train_test_split(grids_fa, ratings_subset) #split
+def FE_split_train_eval(grids, FE_fn, advisor, ratings_subset):
+    """
+    Perform feature engineering, split data, train a LinearRegression model,
+    clip predictions to [0, 1], and evaluate with R² + plots.
 
-    LR = LinearRegression() #initialize
-    LR.fit(grids_train, ratings_train) #fit
+    Parameters
+    ----------
+    grids : np.ndarray
+        Full grid dataset (N, 7, 7).
+    FE_fn : callable
+        Feature engineering function returning feature array.
+    advisor : int
+        Advisor index (used for labeling plots).
+    ratings_subset : np.ndarray
+        Ratings vector (1-D) for this advisor, matching grids.
 
-    preds_train = LR.predict(grids_train) #predict on the train set
-    preds_test = LR.predict(grids_test) #predict on the test set
-    plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, advisor) #plot and calculate R2
+    Returns
+    -------
+    LR : sklearn.linear_model.LinearRegression
+        Fitted regression model.
+    """
+
+    # === Feature Engineering ===
+    grids_fa = FE_fn(grids, verbose=False)
+
+    # === Train/Test Split ===
+    grids_train, grids_test, ratings_train, ratings_test = train_test_split(
+        grids_fa, ratings_subset, test_size=0.25, random_state=42
+    )
+
+    # === Train Linear Model ===
+    LR = LinearRegression()
+    LR.fit(grids_train, ratings_train)
+
+    # === Predictions ===
+    preds_train = LR.predict(grids_train)
+    preds_test  = LR.predict(grids_test)
+
+    # === BLUF: Clip predictions to [0, 1] to keep valid rating range ===
+    preds_train = np.clip(preds_train, 0, 1)
+    preds_test  = np.clip(preds_test, 0, 1)
+
+    # === Plot + Evaluate ===
+    plot_and_r2(preds_train, preds_test, ratings_train, ratings_test, advisor)
+
     return LR
+
 
 
 def merge_predictions(grids, ratings, FE_fn, predictor): #Combine predictions and real ratings
