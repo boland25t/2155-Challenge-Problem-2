@@ -10,8 +10,6 @@ from sklearn.metrics import r2_score
 from fe import *
 from plot_utils import *
 
-from sklearn.model_selection import train_test_splits
-import pandas as pd
 
 # =============================================================================
 # =======================       TRAINING/EVAL       ===========================
