@@ -59,7 +59,7 @@ if os.path.exists(RATINGS_PATH):
     print("✅ Ratings file found.")
 
 # -----------------------------------------------------------------------------
-# Random sampling
+# Random sampling derp
 # -----------------------------------------------------------------------------
 np.random.seed(SEED)
 sample_indices = np.random.choice(n_total, N_SAMPLES, replace=False)
