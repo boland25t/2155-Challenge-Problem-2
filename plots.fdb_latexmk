@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1761587624 "/root/2155-Challenge-Problem-2/plots.tex" "plots.pdf" "plots" 1761587624
+["pdflatex"] 1761762084 "/root/2155-Challenge-Problem-2/plots.tex" "plots.pdf" "plots" 1761762084
   "/etc/texmf/web2c/texmf.cnf" 1761147553 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/root/2155-Challenge-Problem-2/plots.tex" 1761148403 650 6375c77e8861fb292a30a7206fedc497 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -24,11 +24,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1644012257 39432 7155514e09a3d69036fac785183a21c2 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1761147557 128028 f533b797fba58d231669ea19e894e23e ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1761147561 1405654 28e706fc695b37b7e22444f79fe49e57 ""
-  "figures//plot_0.pdf" 1761587595 82726 21fa07863ce46c52837a23a43bcb4904 ""
-  "figures//plot_1.pdf" 1761587600 81740 94552778a3011e4925c721c49f9650c1 ""
-  "figures//plot_2.pdf" 1761587609 81270 c0adcea5cf02972c8a0db09c40144d99 ""
-  "figures//plot_3.pdf" 1761587623 83948 2e5e2be6a6be2a9363628d87c016130b ""
-  "plots.aux" 1761587624 480 1a5965b6726b99ce6f1858fdfb47235f "pdflatex"
+  "figures//plot_0.pdf" 1761762066 82727 570a545c94a31f8ef002e42bd9e4a475 ""
+  "figures//plot_1.pdf" 1761762072 81741 301ae2915e0e2ca530ea9b1e73866844 ""
+  "figures//plot_2.pdf" 1761762078 81272 eb0a53c7ef5c12d282d10e42ebc4dcc5 ""
+  "figures//plot_3.pdf" 1761762083 83951 590a8da3b938f866efc5a46a73050e5f ""
+  "plots.aux" 1761762084 480 1a5965b6726b99ce6f1858fdfb47235f "pdflatex"
   "plots.tex" 1761148403 650 6375c77e8861fb292a30a7206fedc497 ""
   (generated)
   "plots.aux"
