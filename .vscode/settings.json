@@ -1,0 +1,4 @@
+{
+    "python.defaultInterpreterPath": "/root/miniforge3/envs/chalprob2_env/bin/python",
+    "python.terminal.activateEnvironment": true
+}

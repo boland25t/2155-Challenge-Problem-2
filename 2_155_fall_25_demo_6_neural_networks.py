@@ -76,7 +76,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 """Let's load the data. We have a train set and a test set. We give you both the X (images) and Y values (properties) for both datasets. Note, however, that Y test values would conventionally be unavailable in a hackathon/challenge problem or if making predicitons in a real-world application setting."""
 
-!git clone https://github.com/Lyleregenwetter/2.155-Demo-Materials
 
 X = np.load('2.155-Demo-Materials/Metamaterials Demo/X.npy')
 Y = np.load('2.155-Demo-Materials/Metamaterials Demo/Y.npy')
