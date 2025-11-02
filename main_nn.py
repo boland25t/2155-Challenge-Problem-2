@@ -317,7 +317,7 @@ def _predict_in_batches(model, X1, X2=None, batch_size=1024, device="cpu"):
             preds.append(yhat.detach().cpu())
     return torch.cat(preds, dim=0)
 
-def nn_train_eval(...):
+def nn_train_eval(grids_subset, FE_fn, advisor, ratings_subset):
     K = 5
     grids_oh = (np.arange(K) == grids[..., None]).astype(np.float32)   # (N,H,W,K)
     grids_fa = FE_fn(grids, verbose=False).astype(np.float32)
