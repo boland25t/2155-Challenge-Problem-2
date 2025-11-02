@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.10.22)  2 NOV 2025 14:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2025.10.22)  2 NOV 2025 14:46
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -105,7 +105,7 @@ Package pdftex.def Info: figures//plot_2.pdf  used on input line 24.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figures//plot_0.pdf> <./figures//plot_1.pdf>]
-<figures//plot_3.pdf, id=106, 404.7826pt x 227.03696pt>
+<figures//plot_3.pdf, id=109, 404.7826pt x 227.03696pt>
 File: figures//plot_3.pdf Graphic file (type pdf)
 <use figures//plot_3.pdf>
 Package pdftex.def Info: figures//plot_3.pdf  used on input line 30.
@@ -120,9 +120,9 @@ Here is how much of TeX's memory you used:
  14 hyphenation exceptions out of 8191
  55i,6n,62p,251b,227s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on plots.pdf (2 pages, 334177 bytes).
+Output written on plots.pdf (2 pages, 378647 bytes).
 PDF statistics:
- 217 PDF objects out of 1000 (max. 8388607)
+ 222 PDF objects out of 1000 (max. 8388607)
  48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)

@@ -91,7 +91,7 @@ class CNN_DNN_Hybrid(nn.Module):
     
 def train_model(model, X_train, Y_train, X_val, Y_val,
                 X2_train=None, X2_val=None,
-                num_epochs=10, batch_size=32, learning_rate=0.001, device='cuda'):
+                num_epochs=10, batch_size=32, learning_rate=0.001, device='cpu'):
     """
     Generic training function that works for:
         - Single-input models (DNN, CNN)
@@ -214,7 +214,7 @@ def _match_label_shape(outputs, labels):
 
 def train_model(model, X_train, Y_train, X_val, Y_val,
                 X2_train=None, X2_val=None,
-                num_epochs=10, batch_size=32, learning_rate=1e-3, device='cuda'):
+                num_epochs=10, batch_size=32, learning_rate=1e-3, device='cpu'):
 
     model = model.to(device)
     criterion = nn.MSELoss()
@@ -223,7 +223,7 @@ def train_model(model, X_train, Y_train, X_val, Y_val,
     train_dataset = _make_dataset(X_train, Y_train, X2_train)
     val_dataset   = _make_dataset(X_val,   Y_val,   X2_val)
 
-    pin = device.startswith('cuda')
+    pin = device.startswith('cpu')
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True,  pin_memory=pin)
     val_loader   = DataLoader(val_dataset,   batch_size=batch_size, shuffle=False, pin_memory=pin)
 
@@ -317,14 +317,15 @@ def _predict_in_batches(model, X1, X2=None, batch_size=1024, device="cpu"):
             preds.append(yhat.detach().cpu())
     return torch.cat(preds, dim=0)
 
-def nn_train_eval(grids_subset, FE_fn, advisor, ratings_subset):
+def nn_train_eval(grids_subset, FE_fn, advisor, ratings_subset,
+                  num_epochs=10, batch_size=32, learning_rate=1e-3, device='cpu'):
     K = 5
-    grids_oh = (np.arange(K) == grids[..., None]).astype(np.float32)   # (N,H,W,K)
-    grids_fa = FE_fn(grids, verbose=False).astype(np.float32)
+    grids_oh = (np.arange(K) == grids_subset[..., None]).astype(np.float32)   # (N,H,W,K)
+    grids_fa = FE_fn(grids_subset, verbose=False).astype(np.float32)
     y = ratings_subset.astype(np.float32)  # (N,) or (N,m)
 
     X_cnn_tr, X_cnn_te, X_tab_tr, X_tab_te, y_tr, y_te = train_test_split(
-        grids_oh, grids_fa, y, test_size=test_size, random_state=seed, shuffle=True
+        grids_oh, grids_fa, y, test_size=0.25, random_state=42, shuffle=True
     )
 
     def to_channels_first(x): return np.transpose(x, (0,3,1,2))  # (N,H,W,K)->(N,K,H,W)
@@ -367,7 +368,13 @@ def nn_train_eval(grids_subset, FE_fn, advisor, ratings_subset):
     y_test_np   = y_te if y_te.ndim == 1 else y_te.copy()
 
     plot_and_r2(preds_train, preds_test, y_train_np, y_test_np, advisor)
-    ...
+    
+    # Save the trained model ===
+    save_dir = "saved_models"
+    os.makedirs(save_dir, exist_ok=True)
+    save_path = os.path.join(save_dir, f"advisor_{advisor}_model.pt")
+    torch.save(model.state_dict(), save_path)
+    print(f"💾 Saved trained model for advisor {advisor} → {save_path}")
 
 
 def fit_plot_predict_nn(grids, ratings, advisor):
@@ -386,10 +393,6 @@ def fit_plot_predict_nn(grids, ratings, advisor):
 # =============================================================================
 
 
-# Load data
-grids = load_grids()
-ratings = np.load("datasets/scores.npy")
-
 def predict():
     """
     Runs predictions for all advisors with a progress bar.
@@ -402,21 +405,27 @@ def predict():
     # tqdm bar for advisors
     for advisor in tqdm(range(4), desc="Advisors", ncols=80):
         print("advisor count " + str(advisor))
-        predictions = fit_plot_predict(grids, ratings, advisor)
+        predictions = fit_plot_predict_nn(grids, ratings, advisor)
         all_predictions.append(predictions)
 
     print("\n✅ All advisor predictions complete.\n")
     return all_predictions
 
+if __name__ == "__main__":
+    # Load data
+    grids = load_grids()
+    ratings = np.load("datasets/scores.npy")
 
-# Run the pipeline
-all_predictions = predict()
+    # Run the pipeline
+    all_predictions = predict()
 
-# ---- LaTeX PDF Build Section ----
-try:
-    subprocess.run(["latexmk", "-pdf", "plots.tex"], check=True)
-    print("✅ LaTeX PDF rebuilt successfully.")
-except FileNotFoundError:
-    print("⚠️ LaTeXmk not found. Skipping PDF build.")
-except subprocess.CalledProcessError:
-    print("❌ LaTeX build failed. Check plots.tex for errors.")
+    # ---- LaTeX PDF Build Section ----
+    try:
+        subprocess.run(["latexmk", "-pdf", "plots.tex"], check=True)
+        print("✅ LaTeX PDF rebuilt successfully.")
+    except FileNotFoundError:
+        print("⚠️ LaTeXmk not found. Skipping PDF build.")
+    except subprocess.CalledProcessError:
+        print("❌ LaTeX build failed. Check plots.tex for errors.")
+
+
